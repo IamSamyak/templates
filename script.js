@@ -1,6 +1,10 @@
 const OWNER = "IamSamyak";
 const REPO = "Algorithms";
 
+// 🔹 Add your fine-grained token here
+// ⚠️ Do NOT commit this publicly in a public repo
+const TOKEN = "YOUR_FINE_GRAINED_TOKEN";
+
 async function searchFunction() {
   const query = document.getElementById("searchInput").value.trim();
   const resultsDiv = document.getElementById("results");
@@ -15,7 +19,11 @@ async function searchFunction() {
   const searchUrl = `https://api.github.com/search/code?q=${query}+repo:${OWNER}/${REPO}+language:java`;
 
   try {
-    const searchRes = await fetch(searchUrl);
+    const searchRes = await fetch(searchUrl, {
+      headers: {
+        Authorization: `token ${TOKEN}`
+      }
+    });
     const searchData = await searchRes.json();
 
     resultsDiv.innerHTML = "";
@@ -26,7 +34,11 @@ async function searchFunction() {
     }
 
     for (const item of searchData.items) {
-      const fileRes = await fetch(item.url);
+      const fileRes = await fetch(item.url, {
+        headers: {
+          Authorization: `token ${TOKEN}`
+        }
+      });
       const fileData = await fileRes.json();
 
       const decodedCode = atob(fileData.content);
